@@ -1,4 +1,23 @@
 /* game board table */
+body {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	flex-direction: column;
+	background-color: rgb(245, 245, 215);
+}
+
+h1 {
+	font-family: "Monaco", monospace;
+	font-size: 20px;
+	text-align: center;
+	margin: 10px;
+	color: slategrey;
+}
+#game {
+	display: flex;
+	flex-direction: row;
+}
 
 #board td {
 	width: 50px;

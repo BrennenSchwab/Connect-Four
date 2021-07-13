@@ -16,6 +16,7 @@ let board = []; // array of rows, each row is array of cells  (board[y][x])
  */
 
 function makeBoard() {
+  //
   for (let y = 0; y < HEIGHT; y++) {
     board.push(Array.from({length: WIDTH}));
   }
@@ -25,38 +26,35 @@ function makeBoard() {
 
 function makeHtmlBoard() {
   // TODO: get "htmlBoard" variable from the item in HTML w/ID of "board"
-  const htmlBoard = document.getElementById("board");
-  // TODO: add comment for this code
-  /* creates the top area where it is clickable to add pieces to the board in the specific column */
-  const top = document.createElement("tr");
-  top.setAttribute("id", "column-top");
-  top.addEventListener("click", handleClick);
+  const htmlBoard = document.getElementById("board");//retrives board element from HTML
+  const top = document.createElement("tr");//creates the top row 
+  top.setAttribute("id", "column-top");//sets that top row to have an id of column-top
+  top.addEventListener("click", handleClick);//adds a click listener to the top row
 
+  // creates the cells for the board by iterating over each column with respect to the top row
   for (let x = 0; x < WIDTH; x++) {
-    const headCell = document.createElement("td");
-    headCell.setAttribute("id", x);
-    top.append(headCell);
+    const headCell = document.createElement("td"); //creates table cell element 
+    headCell.setAttribute("id", x);// sets this element to have the id of x, which means the cells now have the id of WIDTH -1 to 0
+    top.append(headCell);//appends cell to top row
   }
-  htmlBoard.append(top);
+  htmlBoard.append(top);// appends top to the board
 
-  // looping to create rows of the const HEIGHT, then creating the data cells by
-  // looping through each created row and adding a cell with respect to the const of WIDTH.
-  // this will create the board where the pieces will go
+  //create cell elements for the other rows, looping over HEIGHT first.
   for (let y = 0; y < HEIGHT; y++) {
-    const row = document.createElement("tr");
-    for (let x = 0; x < WIDTH; x++) {
-      const cell = document.createElement("td");
-      cell.setAttribute("id", `${y}-${x}`);
-      row.append(cell);
+    const row = document.createElement("tr");//creating the row elements 
+    for (let x = 0; x < WIDTH; x++) {        //looping through the rows, with respect to WIDTH 
+      const cell = document.createElement("td");//creating table cells for each cell in each row
+      cell.setAttribute("id", `${y}-${x}`);// setting the attribute of the cells to an id used to show position of row and column
+      row.append(cell);// appends the cell to the row
     }
-    htmlBoard.append(row);
+    htmlBoard.append(row);// appends row to the board
   }
 }
 
 /** findSpotForCol: given column x, return top empty y (null if filled) */
 
 function findSpotForCol(x) {
-    for(let y = HEIGHT -1; y>=0; y--){
+    for(let y = HEIGHT-1; y>=0; y--){
       if(!board[y][x]){
         return y;
       }
@@ -79,9 +77,13 @@ function placeInTable(y, x) {
 
 /** endGame: announce game end */
 
+
 function endGame(msg) {
-  alert(msg);
-};
+  setTimeout(()=>{
+    alert(msg);
+    window.location.reload();
+  }, 300)
+}
 
 /** handleClick: handle click of column top to play piece */
 
@@ -97,18 +99,19 @@ function handleClick(evt) {
 
   // place piece in board and add to HTML table
   // TODO: add line to update in-memory board
-  board[y][x] = currPlayer;
+
   placeInTable(y, x);
+  board[y][x] = currPlayer;
 
   // check for win
   if (checkForWin()) {
     return endGame(`Player ${currPlayer} won!`);
-    
+
   }
 
   // check for tie
   // TODO: check if all cells in board are filled; if so call, call endGame
-  if (board.every(row => row.every(cell => cell))) {
+  if (board.every(row => row.every(cell => cell))) {// checks every row is filled, then checks if every cell is filled. if true, tie.
     return endGame('Tie!');
   }
   // switch players
@@ -138,13 +141,13 @@ function checkForWin() {
 
   for (let y = 0; y < HEIGHT; y++) {
     for (let x = 0; x < WIDTH; x++) {
-      // below the code is testing for possible variations for a win based off chip position and mstches it with the above code that tests for if the chips are p1 or p2
+      // below the code is testing for possible variations for a win based off chip position and matches it with the above code that tests for if the chips are currPlayer
       const horiz = [[y, x], [y, x + 1], [y, x + 2], [y, x + 3]];
       const vert = [[y, x], [y + 1, x], [y + 2, x], [y + 3, x]];
       const diagDR = [[y, x], [y + 1, x + 1], [y + 2, x + 2], [y + 3, x + 3]];
       const diagDL = [[y, x], [y + 1, x - 1], [y + 2, x - 2], [y + 3, x - 3]];
 
-      if (_win(horiz) || _win(vert) || _win(diagDR) || _win(diagDL)) {
+      if (_win(horiz) || _win(vert) || _win(diagDR) || _win(diagDL)) {// if any are true, return true and runs endgame
         return true;
       }
     }
